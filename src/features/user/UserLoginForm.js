@@ -11,7 +11,6 @@ import {
 } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import defaultAvatar from '../../app/assets/img/unicorn.png';
-import { current } from '@reduxjs/toolkit';
 import { validateUserLoginForm } from '../../utils/validateUserLoginForm';
 
 const UserLoginForm = () => {
@@ -88,7 +87,7 @@ const UserLoginForm = () => {
                                     {(msg) => <p className='text-danger'>{msg}</p>}
                                 </ErrorMessage>
                             </FormGroup>
-                            <Button type='submit' color='primary'>Login</Button>
+                            <Button onClick={() => setLoginModalOpen(false)} type='submit' color='primary'>Login</Button>
                         </Form>
                     </Formik>
                 </ModalBody>

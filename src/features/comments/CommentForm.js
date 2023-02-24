@@ -1,13 +1,21 @@
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, FormGroup, Label } from 'reactstrap';
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import { validateCommentForm } from "../../utils/validateCommentForm";
-import { addComment } from "./commentsSlice";
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    Label,
+    FormGroup
+} from 'reactstrap';
+import { validateCommentForm } from '../../utils/validateCommentForm';
+import { addComment } from './commentsSlice';
+import { selectCurrentUser } from '../user/userSlice';
 
 const CommentForm = ({ campsiteId }) => {
     const [modalOpen, setModalOpen] = useState(false);
-
+    const currentUser = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
@@ -18,10 +26,10 @@ const CommentForm = ({ campsiteId }) => {
             text: values.commentText,
             date: new Date(Date.now()).toISOString()
         };
-        
+        console.log('comment:', comment);
         dispatch(addComment(comment));
         setModalOpen(false);
-    }
+    };
 
     return (
         <>
@@ -33,11 +41,12 @@ const CommentForm = ({ campsiteId }) => {
                     Add Comment
                 </ModalHeader>
                 <ModalBody>
-                    <Formik initialValues={{
-                        rating: undefined,
-                        author: '',
-                        commentText: ''
-                    }}
+                    <Formik
+                        initialValues={{
+                            rating: undefined,
+                            author: currentUser ? currentUser.username : '',
+                            commentText: ''
+                        }}
                         onSubmit={handleSubmit}
                         validate={validateCommentForm}
                     >
@@ -89,6 +98,6 @@ const CommentForm = ({ campsiteId }) => {
             </Modal>
         </>
     );
-}
+};
 
 export default CommentForm;
